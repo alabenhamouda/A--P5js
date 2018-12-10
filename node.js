@@ -18,18 +18,16 @@ class Node {
     }
 
     connectToNeighbors(graph){
-        const deltax = Node.width + Node.margin;
-        for(let i = this.x - 5*deltax; i <= this.x + 5*deltax; i += deltax){
-            // console.log(i, graph.get(i));
-            if (!graph.has(i)) continue;
-            for (let node of graph.get(i)){
-                let coordinates = [this.x, this.y, node.x, node.y];
-                if(dist(...coordinates) <= 185 && node !== this){
-                    this.neighbors.push(node);
-                    stroke(0);
-                    line(...coordinates);
-                }
+        const threshold = 170;
+        let idx = graph.nodes.indexOf(this);
+        while(abs(this.x - node.x) <= threshold) {
+            if(d(this, node) <= threshold) {
+                this.neighbors.push(node);
+                node.neighbors.push(this);
+                stroke(0);
+                line(this.x, this.y, node.x, node.y);
             }
+            node = graph.nodes[i - 1];
         }
     }
     climb(arr = []){
@@ -51,4 +49,3 @@ class Node {
     }
 }
 Node.width = 10;
-Node.margin = 20;

@@ -1,30 +1,19 @@
-var graph = new Map();
+graph = new Graph();
 var openSet = [];
+var doneDrawing = false;
 function setup(){
     createCanvas(800, 800);
     background(220);
-    const {margin, width: nodeWidth} = Node;
-    for(let x = Node.width; x <= width - Node.width; x += nodeWidth + margin){
-        const occurences = Math.floor(Math.random() * 5 + 1);
-        for(let i = 0; i < occurences; i++){
-            let y = Math.floor(Math.random() * (height - Node.width) + Node.width);
-            let node = new Node(x, y);
-            if(graph.has(x)){
-                graph.get(x).push(node);
-            } else {
-                graph.set(x, [node]);
-            }
-            node.render();
-        }
-    }
-    for(let val of graph.values()){
-        for(let node of val){
-            node.connectToNeighbors(graph);
-        }
-    }
-    graph.start = getNode(graph.get(Node.width), (acc, current) => current.y < acc.y);
-    graph.end = getNode(graph.get(width - Node.width), (acc, current) => current.y > acc.y);
-    openSet.push(graph.start);
+    noLoop();
+    
+    // for(let val of graph.values()){
+    //     for(let node of val){
+    //         node.connectToNeighbors(graph);
+    //     }
+    // }
+    // graph.start = getNode(graph.get(Node.width), (acc, current) => current.y < acc.y);
+    // graph.end = getNode(graph.get(width - Node.width), (acc, current) => current.y > acc.y);
+    // openSet.push(graph.start);
 }
 
 function draw(){
@@ -57,13 +46,17 @@ function draw(){
 }
 
 function mousePressed(){
-    // console.log(mouseX, mouseY);
-    for(let i = mouseX - Node.width; i <= mouseX + Node.width; i++){
-        if(graph.has(i)){
-            for(node of graph.get(i)){
-                if(abs(node.y - mouseY) <= Node.width) console.log(node);
-            }
-        }
+    if(!doneDrawing){
+        let node = new Node(mouseX, mouseY);
+        node.render();
+        graph.nodes.push(node);
+    }
+}
+
+function keyPressed(){
+    if(keyCode === ENTER) {
+        doneDrawing = true;
+        graph.sort();
     }
 }
 
