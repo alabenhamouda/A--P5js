@@ -17,17 +17,20 @@ class Node {
         ellipse(this.x, this.y, Node.width, Node.width);
     }
 
-    connectToNeighbors(graph){
+    connectToNeighbors(){
         const threshold = 170;
         let idx = graph.nodes.indexOf(this);
-        while(abs(this.x - node.x) <= threshold) {
-            if(d(this, node) <= threshold) {
+        let i = idx - 1;
+        let node = graph.nodes[i];
+        while(node !== undefined && abs(this.x - node.x) <= threshold) {
+            if(d(this, node) <= threshold && !this.neighbors.includes(node)) {
                 this.neighbors.push(node);
                 node.neighbors.push(this);
                 stroke(0);
                 line(this.x, this.y, node.x, node.y);
             }
-            node = graph.nodes[i - 1];
+            i = i-1;
+            node = graph.nodes[i];
         }
     }
     climb(arr = []){
@@ -39,13 +42,13 @@ class Node {
     }
 
     get path(){
-        let arr = [];
-        let node = this;
-        while(node !== null){
-            arr = [node, ...arr];
-            node = node.parent;
-        }
-        return arr;
+        // let arr = [];
+        // let node = this;
+        // while(node !== null){
+        //     arr = [node, ...arr];
+        //     node = node.parent;
+        // }
+        return this.climb();
     }
 }
 Node.width = 10;

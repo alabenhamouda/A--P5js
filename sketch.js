@@ -50,6 +50,7 @@ function mousePressed(){
         let node = new Node(mouseX, mouseY);
         node.render();
         graph.nodes.push(node);
+        // console.log(node);
     }
 }
 
@@ -57,6 +58,14 @@ function keyPressed(){
     if(keyCode === ENTER) {
         doneDrawing = true;
         graph.sort();
+        for(let node of graph.nodes){
+            node.connectToNeighbors();
+        }
+        let nodes = graph.nodes;
+        graph.start = nodes[0];
+        openSet.push(graph.start);
+        graph.end = nodes[nodes.length - 1];
+        loop();
     }
 }
 
