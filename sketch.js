@@ -28,6 +28,8 @@ function setup(){
 }
 
 function draw(){
+    background(220);
+    renderNodes();
     if(openSet.length > 0){
         let current = getNode(openSet, (acc, curr) => curr.cost < acc.cost);
         openSet = rmFromArr(openSet, current);
@@ -36,6 +38,7 @@ function draw(){
             console.log('FOUND', current);
             renderPath(current.path, [0, 0, 255], 5);
             noLoop();
+            return;
         }
         let neighbors = current.neighbors.filter(node => !node.searched);
         for(let neighbor of neighbors){
@@ -86,4 +89,11 @@ function renderPath(path, c, w){
         line(acc.x, acc.y, curr.x, curr.y);
         return curr;
     })
+}
+function renderNodes(){
+    for(let nodes of graph.values()){
+        for(let node of nodes){
+            node.render();
+        }
+    }
 }

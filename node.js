@@ -13,6 +13,7 @@ class Node {
     }
 
     render(){
+        stroke(0);
         fill(0);
         ellipse(this.x, this.y, Node.width, Node.width);
     }
@@ -27,7 +28,7 @@ class Node {
                 if(dist(...coordinates) <= 185 && node !== this){
                     this.neighbors.push(node);
                     stroke(0);
-                    line(...coordinates);
+                    // line(...coordinates);
                 }
             }
         }
