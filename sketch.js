@@ -1,5 +1,6 @@
 var graph = new Map();
 var openSet = [];
+var working = true;
 function setup(){
     createCanvas(800, 800);
     background(220);
@@ -37,6 +38,7 @@ function draw(){
         if (current === graph.end){
             console.log('FOUND', current);
             renderPath(current.path, [0, 0, 255], 5);
+            working = false;
             noLoop();
             return;
         }
@@ -55,17 +57,22 @@ function draw(){
         renderPath(current.path, [255, 0, 0], 2);
     } else {
         console.log("THERE IS NO WAY!!!!");
+        working = false;
         noLoop();
     }
 }
 
 function mousePressed(){
-    // console.log(mouseX, mouseY);
-    for(let i = mouseX - Node.width; i <= mouseX + Node.width; i++){
-        if(graph.has(i)){
-            for(node of graph.get(i)){
-                if(abs(node.y - mouseY) <= Node.width) console.log(node);
-            }
+    var node = selectNode(mouseX, mouseY);
+    if(!working && node != undefined){
+        if(graph.end !== null){
+            reset();
+            graph.start = node;
+            openSet.push(node);
+        } else {
+            graph.end = node;
+            working = true;
+            loop();
         }
     }
 }
@@ -96,4 +103,25 @@ function renderNodes(){
             node.render();
         }
     }
+}
+function selectNode(x, y){
+    for(let i = x - Node.width; i <= x + Node.width; i++){
+        if(graph.has(i)){
+            for(node of graph.get(i)){
+                if(abs(node.y - y) <= Node.width) return node;
+            }
+        }
+    }
+}
+function reset(){
+    for(let nodes of graph.values()){
+        for(let node of nodes){
+            node.g = 0;
+            node.searched = false;
+            node.parent = null;
+        }
+    }
+    openSet = [];
+    graph.start = null;
+    graph.end = null;
 }
