@@ -105,6 +105,7 @@ function renderNodes(){
     }
 }
 function selectNode(x, y){
+  [x, y] = [Math.floor(x), Math.floor(y)];
     for(let i = x - Node.width; i <= x + Node.width; i++){
         if(graph.has(i)){
             for(node of graph.get(i)){
